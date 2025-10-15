@@ -1,0 +1,50 @@
+name: Package and Release Dify Plugin
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  package-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download Dify CLI
+        run: |
+          wget https://github.com/langgenius/dify-plugin-daemon/releases/latest/download/dify-plugin-linux-amd64
+          chmod +x dify-plugin-linux-amd64
+          mv dify-plugin-linux-amd64 dify
+
+      - name: Package Dify plugin
+        run: ./dify plugin package .
+
+      - name: Get plugin package name
+        id: plugin_name
+        run: |
+          PLUGIN_PKG=$(ls *.difypkg 2>/dev/null | head -n1 || echo "plugin.difypkg")
+          echo "name=$PLUGIN_PKG" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+          body: |
+            Automated release for commit ${{ github.sha }}.
+          draft: false
+          prerelease: false
+
+      - name: Upload .difypkg asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ steps.plugin_name.outputs.name }}
+          asset_name: ${{ steps.plugin_name.outputs.name }}
+          asset_content_type: application/octet-stream
