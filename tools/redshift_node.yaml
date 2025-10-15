@@ -1,0 +1,36 @@
+identity:
+  name: redshift_node
+  author: formaxcn
+  label:
+    en_US: Redshift Reader
+    zh_Hans: Redshift读取器
+description:
+  human:
+    en_US: Redshift Reader
+    zh_Hans: 从Redshift读取数据。
+  llm: A Dify plugin tool to read data from Redshift database.
+parameters:
+  - name: query
+    type: string
+    required: true
+    label:
+      en_US: SQL Query
+      zh_Hans: SQL查询
+    human_description:
+      en_US: The SQL query to execute
+      zh_Hans: 要执行的SQL查询
+    form: llm
+output_schema:
+  type: object
+  properties:
+    data:
+      type: array
+      items: 
+        type: object
+    columns:
+      type: array
+      items: 
+        type: string
+extra:
+  python:
+    source: tools/redshift_node.py
