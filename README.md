@@ -1,6 +1,6 @@
 # Redshift Reader Plugin for Dify
 
-The Redshift Reader is a Dify plugin that provides workflow nodes with the ability to read data from Amazon Redshift data warehouse. This plugin allows you to execute SQL SELECT queries against your Redshift cluster and retrieve the results for use in your Dify workflows. It connects to Redshift using the PostgreSQL protocol rather than AWS native authentication.
+[The Redshift Reader](https://github.com/formaxcn/dify_redshift_reader) is a Dify plugin that provides workflow nodes with the ability to read data from Amazon Redshift data warehouse. This plugin allows you to execute SQL SELECT queries against your Redshift cluster and retrieve the results for use in your Dify workflows. It connects to Redshift using the PostgreSQL protocol rather than AWS native authentication.
 
 ## Features
 

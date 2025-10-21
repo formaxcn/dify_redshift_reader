@@ -1,6 +1,6 @@
 # Dify的Redshift读取器插件
 
-Redshift读取器是一个Dify插件，为工作流节点提供从Amazon Redshift数据仓库读取数据的能力。该插件允许您对Redshift集群执行SQL SELECT查询，并检索结果以在您的Dify工作流中使用。它使用PostgreSQL协议而不是AWS原生认证来连接Redshift。
+[Redshift读取器](https://github.com/formaxcn/dify_redshift_reader)是一个Dify插件，为工作流节点提供从Amazon Redshift数据仓库读取数据的能力。该插件允许您对Redshift集群执行SQL SELECT查询，并检索结果以在您的Dify工作流中使用。它使用PostgreSQL协议而不是AWS原生认证来连接Redshift。
 
 ## 功能特点
 
