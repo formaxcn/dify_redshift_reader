@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="title desc">
+  <title id="title">Dify Redshift Query Plugin</title>
+  <desc id="desc">Icon: red database cylinder with magnifier and plugin notch</desc>
+  <!-- 背景圆 -->
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#F44336" />
+      <stop offset="1" stop-color="#B8142D" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="62" fill="url(#g1)"/>
+  <!-- 数据库圆柱体（简化3层） -->
+  <g transform="translate(0,6)">
+    <ellipse cx="64" cy="45" rx="30" ry="10" fill="#FFF5F5" opacity="0.15"/>
+    <rect x="34" y="45" width="60" height="26" rx="6" fill="#fff" opacity="0.08"/>
+    <ellipse cx="64" cy="45" rx="30" ry="10" fill="#FFF" opacity="0.12"/>
+    <!-- 圆柱高亮层次 -->
+    <ellipse cx="64" cy="46" rx="26" ry="7" fill="#FFF" opacity="0.18"/>
+    <rect x="38" y="51" width="52" height="18" rx="5" fill="#fff" opacity="0.06"/>
+    <ellipse cx="64" cy="68" rx="26" ry="7" fill="#fff" opacity="0.04"/>
+    <!-- 数据库主体轮廓 -->
+    <path d="M34 46c0 5.5 13.4 10 30 10s30-4.5 30-10v20c0 5.5-13.4 10-30 10S34 71.5 34 66V46z" fill="#fff" opacity="0.04"/>
+  </g>
+  <!-- 放大镜（查询） -->
+  <g transform="translate(18,18)" fill="#fff" stroke="#fff" stroke-width="0" >
+    <circle cx="74" cy="74" r="18" fill="#fff" opacity="0.95"/>
+    <path d="M84 84 L105 105" stroke="#B8142D" stroke-width="6" stroke-linecap="round" fill="none"/>
+    <circle cx="74" cy="74" r="12" fill="#B8142D"/>
+    <rect x="64" y="70" width="2" height="8" fill="#fff" transform="rotate(20 65 74)"/>
+  </g>
+  <!-- 插件 notch（右下）
+  <g transform="translate(76,78)">
+    <rect x="0" y="0" width="28" height="16" rx="3" fill="#2C2C2C" opacity="0.9"/>
+    <rect x="4" y="-8" width="6" height="8" rx="1.5" fill="#2C2C2C" />
+    <rect x="18" y="-8" width="6" height="8" rx="1.5" fill="#2C2C2C" />
+    <rect x="6" y="3" width="16" height="3" rx="1.5" fill="#FFF" opacity="0.12"/>
+  </g> -->
+</svg>

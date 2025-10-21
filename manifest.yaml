@@ -1,0 +1,31 @@
+version: 0.0.1
+type: plugin
+author: formaxcn
+name: redshift_reader
+label:
+  en_US: Redshift Reader
+  zh_Hans: Redshift读取器
+description:
+  en_US: Provide workflow nodes with the ability to read data from Redshift.
+  zh_Hans: 在工作流中提供从Redshift读取数据的能力。
+icon: icon.svg
+tags:
+  - utilities
+resource:
+  memory: 268435456
+  permission: {}
+plugins:
+  tools:
+    - provider/dbcn_provider.yaml
+meta:
+  version: 0.0.1
+  arch:
+    - amd64
+    - arm64
+  runner:
+    language: python
+    version: "3.12"
+    entrypoint: main
+created_at: 2025-03-13T10:01:16.1664153+08:00
+privacy: PRIVACY.md
+verified: false

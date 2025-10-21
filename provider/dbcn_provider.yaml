@@ -1,0 +1,57 @@
+identity:
+  author: formaxcn
+  name: redshift_reader
+  label:
+    en_US: Redshift Reader
+    zh_Hans: Redshift读取器
+  description:
+    en_US: Provide workflow nodes with the ability to read data from Redshift.
+    zh_Hans: 在工作流中提供从Redshift读取数据的能力。
+  icon: icon.svg
+  tags:
+    - utilities
+tools:
+  - tools/redshift_node.yaml
+credentials_for_provider:
+  db_host:
+    type: text-input
+    required: true
+    default: "localhost"
+    label:
+      en_US: "Host address of the Redshift cluster"
+      zh_Hans: "Redshift集群的主机地址"
+  db_port:
+    type: text-input
+    required: true
+    default: "5439"
+    label:
+      en_US: "Port number of the Redshift cluster"
+      zh_Hans: "Redshift集群的端口号"
+  db_name:
+    type: text-input
+    required: true
+    label:
+      en_US: "Name of the Redshift database"
+      zh_Hans: "Redshift数据库的名称"
+  db_user:
+    type: text-input
+    required: true
+    label:
+      en_US: "Username for Redshift access"
+      zh_Hans: "Redshift访问的用户名"
+  db_password:
+    type: secret-input
+    required: true
+    label:
+      en_US: "Password for Redshift access"
+      zh_Hans: "Redshift访问的密码"
+  max_fetched_rows:
+    type: text-input
+    required: false
+    default: "100"
+    label:
+      en_US: "Max fetched rows"
+      zh_Hans: "最大读取行数"
+extra:
+  python:
+    source: provider/dbcn_provider.py

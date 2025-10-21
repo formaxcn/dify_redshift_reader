@@ -1,0 +1,59 @@
+name: Package and Release Dify Plugin
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  package-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Calculate paths
+        id: paths
+        run: |
+          echo "parent_dir=$(dirname "$GITHUB_WORKSPACE")" >> $GITHUB_OUTPUT
+          echo "plugin_dir=$(basename "$GITHUB_WORKSPACE")" >> $GITHUB_OUTPUT
+
+      - name: Download Dify CLI
+        run: |
+          wget -O /tmp/dify https://github.com/langgenius/dify-plugin-daemon/releases/latest/download/dify-plugin-linux-amd64
+          chmod +x /tmp/dify
+
+      - name: Package Dify plugin
+        run: /tmp/dify plugin package ${{ steps.paths.outputs.plugin_dir }}
+        working-directory: ${{ steps.paths.outputs.parent_dir }}
+
+      - name: Get plugin package name
+        id: plugin_name
+        run: |
+          PLUGIN_PKG=$(ls *.difypkg 2>/dev/null | head -n1 || echo "${{ steps.paths.outputs.plugin_dir }}.difypkg")
+          echo "pkg_name=$PLUGIN_PKG" >> $GITHUB_OUTPUT
+        working-directory: ${{ steps.paths.outputs.parent_dir }}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+          body: |
+            Automated release for commit ${{ github.sha }}.
+          draft: false
+          prerelease: false
+
+      - name: Upload .difypkg asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ steps.paths.outputs.parent_dir }}/${{ steps.plugin_name.outputs.pkg_name }}
+          asset_name: ${{ steps.plugin_name.outputs.pkg_name }}
+          asset_content_type: application/octet-stream
