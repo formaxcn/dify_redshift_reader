@@ -28,8 +28,8 @@ def generate_chart():
     
     # 设置标题和标签
     plt.title('Dify Marketplace Installs', fontsize=16, pad=20)
-    plt.xlabel('日期', fontsize=12)
-    plt.ylabel('安装数', fontsize=12)
+    plt.xlabel('', fontsize=12)
+    plt.ylabel('', fontsize=12)
     
     # 格式化x轴日期显示
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
