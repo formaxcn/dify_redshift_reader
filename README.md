@@ -18,9 +18,12 @@
 
 ## Installation
 
-1. Package the plugin according to Dify plugin specifications
-2. Upload the plugin to your Dify instance
-3. Configure the plugin with your Redshift connection credentials
+You can install the plugin in two ways:
+
+1. From [Dify Marketplace](https://marketplace.dify.ai/plugins/formaxcn/redshift_reader)
+2. Package the plugin according to Dify plugin specifications and upload it to your Dify instance
+
+![Plugin Install Trend](.github/count_install/plugin_installs_trend.png)
 
 ## Configuration
 

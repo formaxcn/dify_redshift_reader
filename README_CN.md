@@ -18,9 +18,12 @@
 
 ## 安装
 
-1. 根据Dify插件规范打包插件
-2. 将插件上传到您的Dify实例
-3. 使用您的Redshift连接凭证配置插件
+您可以通过两种方式安装插件：
+
+1. 从 [Dify Marketplace](https://marketplace.dify.ai/plugins/formaxcn/redshift_reader) 下载安装
+2. 根据Dify插件规范打包插件并上传到您的Dify实例
+
+![插件下载趋势图](.github/count_install/plugin_installs_trend.png)
 
 ## 配置
 
