@@ -1,35 +1,70 @@
-name: Package and Release Dify Plugin
+name: Auto-tag and Release on Version Change
 
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - main
+    paths:
+      - 'manifest.yaml'
 
 jobs:
-  package-and-release:
+  check-version-and-release:
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 2
 
+      - name: Get version from manifest.yaml
+        id: get_version
+        run: |
+          VERSION=$(grep '^version:' manifest.yaml | sed 's/version: *//' | sed 's/"//g')
+          echo "version=v$VERSION" >> $GITHUB_OUTPUT
+          echo "Detected version: v$VERSION"
+
+      - name: Check if tag already exists
+        run: |
+          TAG="${{ steps.get_version.outputs.version }}"
+          if git rev-parse "$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists"
+            echo "tag_exists=true" >> $GITHUB_ENV
+          else
+            echo "Tag $TAG does not exist"
+            echo "tag_exists=false" >> $GITHUB_ENV
+
+      - name: Create and push tag
+        if: env.tag_exists == 'false'
+        run: |
+          TAG="${{ steps.get_version.outputs.version }}"
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git tag -a "$TAG" -m "Release $TAG"
+          git push origin "$TAG"
+          
       - name: Calculate paths
+        if: env.tag_exists == 'false'
         id: paths
         run: |
           echo "parent_dir=$(dirname "$GITHUB_WORKSPACE")" >> $GITHUB_OUTPUT
           echo "plugin_dir=$(basename "$GITHUB_WORKSPACE")" >> $GITHUB_OUTPUT
 
       - name: Download Dify CLI
+        if: env.tag_exists == 'false'
         run: |
           wget -O /tmp/dify https://github.com/langgenius/dify-plugin-daemon/releases/latest/download/dify-plugin-linux-amd64
           chmod +x /tmp/dify
 
       - name: Package Dify plugin
+        if: env.tag_exists == 'false'
         run: /tmp/dify plugin package ${{ steps.paths.outputs.plugin_dir }}
         working-directory: ${{ steps.paths.outputs.parent_dir }}
 
       - name: Get plugin package name
+        if: env.tag_exists == 'false'
         id: plugin_name
         run: |
           PLUGIN_PKG=$(ls *.difypkg 2>/dev/null | head -n1 || echo "${{ steps.paths.outputs.plugin_dir }}.difypkg")
@@ -37,19 +72,21 @@ jobs:
         working-directory: ${{ steps.paths.outputs.parent_dir }}
 
       - name: Create Release
+        if: env.tag_exists == 'false'
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.get_version.outputs.version }}
           body: |
             Automated release for commit ${{ github.sha }}.
           draft: false
           prerelease: false
 
       - name: Upload .difypkg asset
+        if: env.tag_exists == 'false'
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
