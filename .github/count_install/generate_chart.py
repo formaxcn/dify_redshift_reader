@@ -53,9 +53,6 @@ def generate_chart():
     # 保存图表
     plt.savefig('plugin_installs_trend.png', dpi=300, bbox_inches='tight')
     print("图表已保存为 plugin_installs_trend.png")
-    
-    # 显示图表
-    plt.show()
 
 if __name__ == "__main__":
     generate_chart()
