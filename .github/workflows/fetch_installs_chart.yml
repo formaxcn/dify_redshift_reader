@@ -1,0 +1,49 @@
+name: Fetch Plugin Installs and Generate Chart
+
+on:
+  schedule:
+    # 每两周执行一次，周一上午 9 点（UTC 时间）
+    - cron: '0 9 */14 * *'
+  workflow_dispatch: # 允许手动触发
+
+jobs:
+  fetch-and-chart:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      
+      - name: Install uv
+        run: |
+          pip install uv
+      
+      - name: Install dependencies with uv
+        run: |
+          uv pip install -r .github/count_install/requirements.txt
+      
+      - name: Fetch install count
+        run: |
+          cd .github/count_install
+          python dify_plugin_installs.py
+      
+      - name: Generate chart
+        run: |
+          cd .github/count_install
+          python generate_chart.py
+      
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .github/count_install/download.csv .github/count_install/plugin_installs_trend.png
+          git diff --staged --quiet || git commit -m "Update plugin install count and chart"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
