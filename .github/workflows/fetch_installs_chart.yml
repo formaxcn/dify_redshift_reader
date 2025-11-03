@@ -24,17 +24,21 @@ jobs:
         run: |
           pip install uv
       
-      - name: Install dependencies with uv
+      - name: Create virtual environment and install dependencies with uv
         run: |
+          uv venv
+          source .venv/bin/activate
           uv pip install -r .github/count_install/requirements.txt
       
       - name: Fetch install count
         run: |
+          source .venv/bin/activate
           cd .github/count_install
           python dify_plugin_installs.py
       
       - name: Generate chart
         run: |
+          source .venv/bin/activate
           cd .github/count_install
           python generate_chart.py
       
